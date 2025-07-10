@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Smart Farmer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      margin: 20px;
+      overflow: hidden;
+    }
+
+    .form-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 2.5rem;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      overflow: scroll;
+      scrollbar-color: rgba(0, 0, 0, 0.055) transparent;
+    }
+
+    .result-section {
+      background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
+      color: white;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2E7D32;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon {
+      width: 30px;
+      height: 30px;
+      background: #4CAF50;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .radio-item:hover {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .radio-item input[type="radio"]:checked + span {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .slider-container {
+      margin: 1rem 0;
+    }
+
+    .slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #ddd;
+      outline: none;
+      appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4CAF50;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .crop-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .crop-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .crop-name {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .crop-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .info-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100%;
+    }
+
+    .info-section h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #E8F5E8;
+    }
+
+    .info-section p {
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0.25rem;
+    }
+
+    .status-normal { background: rgba(76, 175, 80, 0.2); color: #2E7D32; }
+    .status-basah { background: rgba(33, 150, 243, 0.2); color: #1976D2; }
+    .status-lembab { background: rgba(3, 169, 244, 0.2); color: #0277BD; }
+    .status-kering { background: rgba(255, 152, 0, 0.2); color: #F57C00; }
+    .status-sangat-kering { background: rgba(244, 67, 54, 0.2); color: #D32F2F; }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fisik-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .fisik-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      transition: all 0.3s ease;
+    }
+
+    .fisik-item:hover {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.05);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        margin: 10px;
+        border-radius: 15px;
+      }
+      
+      .form-section, .result-section {
+        padding: 1.5rem;
+      }
+      
+      .crop-name {
+        font-size: 1.5rem;
+      }
+      
+      .radio-group {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="sm:flex justify-center h-screen">
+  <div class="container sm:flex w-full max-w-6xl mx-auto">
+    <section class="form-section sm:w-1/2 h-full flex flex-col justify-start">
+      <h1 class="text-2xl font-bold mb-10 text-center">
+        🌾 Smart Farmer Expert System 🌾
+      </h1>
+      
+      <div class="form-group">
+        <div class="section-title">
+          <div class="icon">🌱</div>
+          <b>Tanaman</b>
+        </div>
+        <div class="radio-group">
+          <label class="radio-item">
+            <input type="radio" name="tanaman" value="padi">
+            <span>🌾 Padi</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="tanaman" value="kopi">
+            <span>☕ Kopi</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="tanaman" value="lidah buaya">
+            <span>🌿 Lidah Buaya</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="section-title">
+          <div class="icon">🌡️</div>
+          <b>Cuaca</b>
+        </div>
+        <div class="slider-container">
+          <input type="range" class="slider" id="cuaca" min="0" max="100" value="50">
+          <div class="slider-labels">
+            <span>🌧️ Hujan</span>
+            <span>🌤️ Panas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="section-title">
+          <div class="icon">🏞️</div>
+          <b>Kondisi Tanah</b>
+        </div>
+        <p id="tanah" class="status-badge status-normal">Normal</p>
+      </div>
+
+      <div id="fisik" class="form-group">
+        <div class="section-title">
+          <div class="icon">🔬</div>
+          <b>Fisik Tanaman</b>
+        </div>
+        <div class="fisik-container">
+          <label class="fisik-item">
+            <input type="radio" name="kondisi" value="default">
+            <span>Kondisi fisik</span>
+          </label>
+        </div>
+      </div>
+
+      <button id="delete" class="btn-delete">
+        🗑️ Hapus Pilihan
+      </button>
+
+      <div id="pupuk" class="mt-4">
+        <p id="pupukName" class="font-bold text-green-700"></p>
+        <p id="penjelasanPupuk" class="text-sm text-gray-600 mt-2"></p>
+      </div>
+
+      <div id="penyakit" class="mt-4">
+        <p id="penyakitName" class="font-bold text-red-700"></p>
+        <p id="vitamin" class="text-sm text-blue-600 mt-1"></p>
+        <p id="penyakitDesc" class="text-sm text-gray-600 mt-2"></p>
+      </div>
+    </section>
+
+    <section class="result-section sm:w-1/2 h-full">
+      <div class="info-section">
+        <p id="pemberianAir" class="font-bold text-lg mb-2"></p>
+        <p id="pemberianPupuk" class="font-bold text-lg mb-2"></p>
+        <p id="pemberianVit" class="font-bold text-lg mb-2"></p>
+      </div>
+      
+      <div class="crop-image">
+        <img src="./test/assets/download.gif" alt="Plant Animation" style="display: none;">
+        <span style="font-size: 48px;">🌱</span>
+      </div>
+      
+      <h1 id="name" class="crop-name">Pilih Tanaman</h1>
+      <h2 id="air" class="crop-description"></h2>
+      <p id="desc" class="text-center pt-5 px-4"></p>
+    </section>
+  </div>
+  
+  <script>
+    const data = {
+      padi: {
+        desc: "Tanaman padi (Oryza sativa L.) merupakan tanaman semusim dengan morfologi berbatang bulat dan berongga yang disebut jerami. Daunnya memanjang dengan ruas searah batang daun. Pada batang utama dan anakan membentuk rumpun pada fase vegetatif dan membentuk malai pada fase generatif. produk yang dihasilkan berupa beras, makanan pokok di Indonesia",
+        air: {
+          kebutuhan: "butuh banyak air (genangan kontinu)",
+          literBase: 50 / 20,
+          satuan: "liter per m²",
+          alasan: "Padi memerlukan genangan air untuk mencegah gulma dan mendukung pembentukan anakan.",
+        },
+        pupuk: {
+          jenis: "Urea, SP-36, KCl",
+          alasan: "Ketiga pupuk ini memberikan nitrogen, fosfor, dan kalium yang krusial pada berbagai fase pertumbuhan padi.",
+        },
+        penyakitMap: {
+          stres: {
+            penyakit: "Stres pasca tanam",
+            vitamin: "Vitamin B1 (Thiamine)",
+            alasan: "Thiamine membantu pemulihan akar dan pertumbuhan setelah transplantasi atau cuaca ekstrem.",
+          },
+          "layu dan kuning": {
+            penyakit: "Kekurangan Hara (Zn, Fe)",
+            vitamin: "Pupuk mikro seperti Zn dan Fe",
+            alasan: "Kekurangan mikronutrien menyebabkan klorosis, layu, dan pertumbuhan tidak optimal.",
+          },
+          "bercak daun": {
+            penyakit: "Blast (Pyricularia oryzae)",
+            vitamin: "Fungisida spesifik",
+            alasan: "Blast ditandai dengan bercak lonjong coklat keabu-abuan yang bisa merusak produktivitas.",
+          },
+        },
+      },
+      "lidah buaya": {
+        desc: "Lidah buaya, atau Aloe vera, adalah tanaman berdaun berdaging yang terkenal karena manfaatnya dalam perawatan kulit dan kesehatan. Tanaman ini memiliki daun panjang, berdaging, dan berlekuk yang mengandung gel bening yang kaya akan nutrisi.",
+        air: {
+          kebutuhan: "butuh sedikit air",
+          literBase: 50 / 0.1,
+          satuan: "liter per tanaman",
+          alasan: "Sebagai tanaman sukulen, lidah buaya menyimpan air dalam daunnya dan sensitif terhadap kelembaban berlebih.",
+        },
+        pupuk: {
+          jenis: "Kompos / pupuk majemuk dosis rendah",
+          alasan: "Nutrisi berlebih bisa membuat lidah buaya busuk. Pupuk cukup 1-2 kali per tahun.",
+        },
+        penyakitMap: {
+          "akar busuk": {
+            penyakit: "Busuk Akar",
+            vitamin: "Kurangi air dan pastikan drainase",
+            alasan: "Busuk akar disebabkan oleh kelembaban berlebih dan aerasi tanah yang buruk.",
+          },
+          stres: {
+            penyakit: "Stres lingkungan",
+            vitamin: "Stabilkan suhu dan pencahayaan",
+            alasan: "Fluktuasi suhu atau pencahayaan ekstrem menyebabkan stres dan pertumbuhan lambat.",
+          },
+        },
+      },
+      kopi: {
+        desc: "Kopi termasuk kelompok tanaman semak belukar dengan genius Coffea. Kopi termasuk ke dalam family Rubiaceae, subfamily lxoroideae, dan suku Coffeae. Seorang bernama Linnaeus merupakan orang yang pertama mendeskripsikan spesies kopi (Coffea arabica) pada tahun 1753. Produk yang dihasilkan berupa biji kopi yang dapat diolah menjadi minuman",
+        air: {
+          kebutuhan: "kebutuhan air normal (tidak terlalu banyak tidak terlalu sedikit)",
+          literBase: 50 / 4,
+          satuan: "liter per pohon",
+          alasan: "Kopi memerlukan pasokan air stabil, terutama saat pembentukan bunga dan buah.",
+        },
+        pupuk: {
+          jenis: "NPK Seimbang + pupuk mikro",
+          alasan: "Keseimbangan NPK penting untuk daun, akar, dan buah, ditambah mikronutrien untuk hasil optimal.",
+        },
+        penyakitMap: {
+          stres: {
+            penyakit: "Stres karena kekeringan atau shock",
+            vitamin: "ZPT atau mikronutrien",
+            alasan: "ZPT membantu tanaman pulih dari stres fisiologis atau adaptasi lingkungan baru.",
+          },
+          "bercak daun": {
+            penyakit: "Karat Daun (Hemileia vastatrix)",
+            vitamin: "Fungisida dan varietas tanah",
+            alasan: "Karat daun menyebabkan kehilangan daun dan hasil, dan harus dikendalikan sejak dini.",
+          },
+        },
+      },
+    };
+
+    // Plant selection functionality
+    const plants = document.querySelectorAll('input[name="tanaman"]');
+    plants.forEach((plant) => {
+      plant.addEventListener("change", () => {
+        const plantName = plant.value;
+        console.log("nama tanaman " + plant.value);
+        
+        // Update crop icon
+        const cropIcon = document.querySelector('.crop-image span');
+        const plantIcons = {
+          'padi': '🌾',
+          'kopi': '☕',
+          'lidah buaya': '🌿'
+        };
+        cropIcon.textContent = plantIcons[plantName] || '🌱';
+        
+        document.querySelector("#name").innerText = plantName.charAt(0).toUpperCase() + plantName.slice(1);
+        document.querySelector("#desc").innerText = data[plantName].desc;
+        document.querySelector("#air").innerText = data[plantName].air.kebutuhan;
+        
+        air(plantName);
+        fisik(data[plantName].penyakitMap);
+        pemberianPupuk(plantName);
+        reset();
+      });
+    });
+
+    // Disease/condition radio buttons
+    const fisik = (arr) => {
+      const fisikContainer = document.querySelector("#fisik .fisik-container");
+      if (fisikContainer) {
+        fisikContainer.innerHTML = "";
+      } else {
+        const container = document.createElement('div');
+        container.className = 'fisik-container';
+        document.querySelector("#fisik").appendChild(container);
+      }
+      
+      const container = document.querySelector("#fisik .fisik-container");
+      
+      for (const key in arr) {
+        const label = document.createElement("label");
+        label.className = "fisik-item";
+        
+        const input = document.createElement("input");
+        input.setAttribute("name", "kondisi");
+        input.setAttribute("type", "radio");
+        input.setAttribute("value", key);
+        
+        const span = document.createElement("span");
+        span.textContent = key;
+        
+        label.appendChild(input);
+        label.appendChild(span);
+        container.appendChild(label);
+        
+        console.log("kondisi " + key);
+        input.addEventListener("change", () => {
+          if (input.checked) {
+            kondisi();
+          }
+        });
+      }
+    };
+
+    // Disease description
+    const kondisi = () => {
+      const plantName = document.querySelector('input[name="tanaman"]:checked').value;
+      const penyakitName = document.querySelector('input[name="kondisi"]:checked').value;
+      console.log("nama + penyakit " + plantName + penyakitName);
+      
+      pemberianVit(plantName, penyakitName);
+    };
+
+    // Weather range
+    const range = document.querySelector('#cuaca');
+    let cuaca = range.value;
+    range.addEventListener('input', () => {
+      cuaca = parseInt(range.value);
+      tanah(cuaca);
+      const checkedPlant = document.querySelector('input[name="tanaman"]:checked');
+      if (checkedPlant) {
+        const plantName = checkedPlant.value;
+        air(plantName);
+      }
+    });
+
+    // Output functions
+    const air = (plantName) => {
+      cuaca = parseInt(range.value) / data[plantName].air.literBase;
+      console.log(cuaca);
+      if (parseInt(range.value) > 25) {
+        document.querySelector('#pemberianAir').innerHTML = `💧 Menyiram ${cuaca.toFixed(1)} ${data[plantName].air.satuan}`;
+      } else {
+        document.querySelector('#pemberianAir').innerHTML = `💧 Tidak perlu penyiraman`;
+      }
+    };
+
+    const pemberianVit = (plantName, penyakitName) => {
+      const pemberianVit = document.querySelector('#pemberianVit');
+      pemberianVit.innerHTML = `💊 Memberikan ${data[plantName].penyakitMap[penyakitName].vitamin}`;
+      document.getElementById("penyakitName").innerHTML = `<b>🦠 Penyakit: ${data[plantName].penyakitMap[penyakitName].penyakit}</b>`;
+      document.getElementById("vitamin").innerHTML = `<b>💊 Obat/Vit:</b> ${data[plantName].penyakitMap[penyakitName].vitamin}`;
+      document.getElementById("penyakitDesc").innerText = data[plantName].penyakitMap[penyakitName].alasan;
+    };
+
+    const pemberianPupuk = (plantName) => {
+      console.log('pupuk');
+      const pemberianPupuk = document.querySelector('#pemberianPupuk');
+      pemberianPupuk.innerHTML = `🌱 Memberi pupuk ${data[plantName].pupuk.jenis}`;
+      
+      document.getElementById("pupukName").innerHTML = `<b>🧪 Pupuk: ${data[plantName].pupuk.jenis}</b>`;
+      document.getElementById("penjelasanPupuk").innerText = data[plantName].pupuk.alasan;
+    };
+
+    const tanah = (range) => {
+      let kondisiTanah = '';
+      let statusClass = '';
+      
+      if (range <= 15) {
+        kondisiTanah = 'Basah';
+        statusClass = 'status-basah';
+      } else if (range < 30) {
+        kondisiTanah = 'Lembab';
+        statusClass = 'status-lembab';
+      } else if (range < 70) {
+        kondisiTanah = 'Normal';
+        statusClass = 'status-normal';
+      } else if (range < 85) {
+        kondisiTanah = 'Kering';
+        statusClass = 'status-kering';
+      } else if (range <= 100) {
+        kondisiTanah = 'Sangat kering';
+        statusClass = 'status-sangat-kering';
+      }
+      
+      console.log(range);
+      const tanahElement = document.querySelector("#tanah");
+      tanahElement.innerHTML = kondisiTanah;
+      tanahElement.className = `status-badge ${statusClass}`;
+    };
+
+    // Reset function
+    document.querySelector('#delete').addEventListener('click', () => {
+      document.querySelectorAll('input[name="kondisi"]').forEach(radio => {
+        radio.checked = false;
+      });
+      reset();
+    });
+
+    const reset = () => {
+      document.getElementById("penyakitName").innerHTML = ``;
+      document.getElementById("vitamin").innerHTML = ``;
+      document.getElementById("penyakitDesc").innerHTML = ``;
+      // document.querySelector('#pemberianVit').innerHTML = `💊 Informasi vitamin/obat akan muncul di sini`;
+    };
+
+    // Initialize soil condition
+    tanah(50);
+  </script>
+</body>
+</html>

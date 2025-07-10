@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>Smart Farmer</title>
+</head>
+<body class="sm:flex justify-center h-screen">
+  <section class="sm:w-[50%] h-full flex flex-col justify-start p-10">
+    <h1 class="text-3xl font-bold mb-10">Smart Farmer Expert System</h1>
+    <div>
+      <div for="#">
+        <b>Tanaman</b>
+        <br>
+        <div class="flex gap-x-5">
+          <label ><input type="radio" name="tanaman" value="padi">Padi</label>
+          <label ><input type="radio" name="tanaman" value="kopi">Kopi</label>        
+          <label ><input type="radio" name="tanaman" value="lidah buaya">Lidah buaya</label>
+        </div>
+      </div>
+
+      <div>
+        <b>Cuaca</b>
+        <input type="range" class="block w-50" id="cuaca" min="0" max="100" value="50">
+        <div class="flex gap-30">
+          <span>Hujan</span> <span>Panas</span>
+        </div>
+      </div>
+
+      <div>
+        <b>Kondisi tanah</b>
+        <p id="tanah">Normal</p>
+      </div>
+
+      <div id="fisik">
+        <b>Fisik tanaman</b>
+        <label class="block"><input type="radio" name="kondisi">Kondisi fisik</label>
+      </div>
+      <button id="delete">Hapus</button>
+      
+
+      <div id="pupuk">
+        <br>
+        <p id="pupukName"></p>
+        <p id="penjelasanPupuk"></p>
+      </div>
+
+      <div id="penyakit">
+        <br>
+        <p id="penyakitName"></p>
+        <p id="vitamin"></p>
+        <p id="penyakitDesc"></p>
+      </div>
+    </div>
+  </section>
+  <section class="w-[50%] h-full flex flex-col items-center justify-center">
+    <p id="pemberianAir"></p>
+    <p id="pemberianPupuk"></p>
+    <p id="pemberianVit"></p>
+    
+    <img src="./assets/download.gif" alt="" class="-mt-10">
+    <h1 id="name" class="font-bold text-2xl mt-5">Pilih tanaman</h1>
+    <h1 id="air" class="font-medium text-xl text-center mt-2"></h1>
+    <p id="desc" class="text-center pt-5 px-15"></p>
+  </section>
+  
+  <script src="index.js"></script>
+</body>
+</html>
